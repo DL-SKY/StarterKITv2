@@ -77,7 +77,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Example
+  m_Text: Second Scene
 --- !u!1 &3273851581545383502
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad290b7d6dca69f46915fab4af2ddbdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canUseEsc: 0
+  _canUseEsc: 0
 --- !u!1 &3478398908186208276
 GameObject:
   m_ObjectHideFlags: 0

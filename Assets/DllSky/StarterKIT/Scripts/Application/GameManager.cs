@@ -55,7 +55,7 @@ namespace DllSky.StarterKITv2.Application
         {
             var windowsManager = ComponentLocator.Resolve<WindowsManager>();
             windowsManager.CreateWindow<GameLoadingWindow>(GameLoadingWindow.prefabPath, Enums.EnumWindowsLayer.Loading);
-            windowsManager.CreateWindow<FPSWindow>(FPSWindow.prefabPath, Enums.EnumWindowsLayer.Special);
+            windowsManager.CreateWindow<FPSWindow>(FPSWindow.prefabPath, Enums.EnumWindowsLayer.Special, includeInWindowsList: false);
         }
 
         private void OnSceneLoadedHandler(Scene scene, LoadSceneMode loadSceneMode)

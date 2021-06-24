@@ -23,13 +23,13 @@ namespace DllSky.StarterKITv2.UI.Windows.MainMenu
         {
             _data = data;
 
-            if (_gameManager.CheckCurrentScene(ConstantScenes.MAIN_MENU))
+            if (_gameManager.CheckCurrentScene(ConstantScenes.EXAMPLE_MAIN_MENU))
             {
                 base.Initialize(data);
             }
             else
             {
-                _loading = _gameManager.LoadSceneAsync(ConstantScenes.MAIN_MENU);
+                _loading = _gameManager.LoadSceneAsync(ConstantScenes.EXAMPLE_MAIN_MENU);
                 _loading.completed += OnLoadSceneCompletedHandler;
             }
         }
