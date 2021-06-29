@@ -1,20 +1,23 @@
-﻿using System;
+﻿using DllSky.StarterKITv2.Interfaces.Windows;
+using System;
 using UnityEngine;
 
 namespace DllSky.StarterKITv2.UI.Windows
 {
-    public class WindowBase : MonoBehaviour
+    public class WindowBase : MonoBehaviour, IWindowInitializer
     {
-        public Action OnInitialize;
-        public Action<bool, WindowBase> OnClose;        
+        public event Action OnInitialize;
+        public event Action<bool, WindowBase> OnClose;  
+        
+        public bool IsInit { get; private set; }
 
         [Header("Main Settings")]
         [SerializeField] protected bool _canUseEsc;
 
 
         public virtual void Initialize(object data)
-        {
-            OnInitialize?.Invoke();
+        {            
+            SetInitialize(true);
         }
 
         public void Close(bool result = false)
@@ -31,6 +34,15 @@ namespace DllSky.StarterKITv2.UI.Windows
                 Close();
 
             CustomOnClickEsc();
+        }
+
+
+        protected void SetInitialize(bool state)
+        {
+            IsInit = state;
+                
+            if (IsInit)
+                OnInitialize?.Invoke();
         }
 
 

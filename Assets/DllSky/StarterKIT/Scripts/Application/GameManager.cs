@@ -1,5 +1,6 @@
 ﻿using DllSky.StarterKITv2.Constants;
 using DllSky.StarterKITv2.Events;
+using DllSky.StarterKITv2.Interfaces.Windows;
 using DllSky.StarterKITv2.Patterns;
 using DllSky.StarterKITv2.Services;
 using DllSky.StarterKITv2.UI.Windows.FPS;
@@ -10,14 +11,18 @@ using UnityEngine.SceneManagement;
 
 namespace DllSky.StarterKITv2.Application
 {
-    public class GameManager : Singleton<GameManager>
+    public class GameManager : Singleton<GameManager>, IWindowsManagerUsing
     {
         [SerializeField] private bool _isUsingFPS;
+
+        public WindowsManager WindowsController { get; private set; }
 
 
         private void Start()
         {
             SceneManager.sceneLoaded += OnSceneLoadedHandler;
+
+            WindowsController = ComponentLocator.Resolve<WindowsManager>();
 
 #if UNITY_ANDROID
             UnityEngine.Application.targetFrameRate = 60;
@@ -44,18 +49,22 @@ namespace DllSky.StarterKITv2.Application
         }
 
 
-        //Example
         private void Initialize()
         {
+            CreateLoadingWindow();
+
             if (_isUsingFPS)
                 CreateFPSCounter();
         }
 
+        private void CreateLoadingWindow()
+        {
+            WindowsController.CreateWindow<GameLoadingWindow>(GameLoadingWindow.prefabPath, Enums.EnumWindowsLayer.Loading);
+        }
+
         private void CreateFPSCounter()
         {
-            var windowsManager = ComponentLocator.Resolve<WindowsManager>();
-            windowsManager.CreateWindow<GameLoadingWindow>(GameLoadingWindow.prefabPath, Enums.EnumWindowsLayer.Loading);
-            windowsManager.CreateWindow<FPSWindow>(FPSWindow.prefabPath, Enums.EnumWindowsLayer.Special, includeInWindowsList: false);
+            WindowsController.CreateWindow<FPSWindow>(FPSWindow.prefabPath, Enums.EnumWindowsLayer.Special, includeInWindowsList: false);
         }
 
         private void OnSceneLoadedHandler(Scene scene, LoadSceneMode loadSceneMode)

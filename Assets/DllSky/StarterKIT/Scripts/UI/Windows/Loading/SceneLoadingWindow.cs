@@ -1,34 +1,40 @@
 ﻿using DllSky.StarterKITv2.Application;
+using DllSky.StarterKITv2.Interfaces.Windows;
 using System;
 using UnityEngine;
 
 namespace DllSky.StarterKITv2.UI.Windows.Loading
 {
-    public class SceneLoadingWindow : WindowBase
+    public class SceneLoadingWindow : WindowBase, IWindowSceneLoader
     {
         public const string prefabPath = @"Prefabs\UI\Windows\Loading\SceneLoadingWindow";
 
-        public Action OnSceneLoaded;
-
-        private string _sceneName;
-        private AsyncOperation _loading;
+        public event Action OnSceneLoaded;
+        
+        public string SceneName { get; private set; }
+        public AsyncOperation LoadingProc { get; private set; }
 
 
         public override void Initialize(object data)
         {
-            _sceneName = (string)data;
+            SceneName = (string)data;
 
-            _loading = GameManager.Instance.LoadSceneAsync(_sceneName);
-            _loading.completed += OnLoadSceneCompletedHandler;
+            LoadingProc = GameManager.Instance.LoadSceneAsync(SceneName);
+            LoadingProc.completed += OnLoadSceneCompletedHandler;
 
-            base.Initialize(data);
+            SetInitialize(true);
+        }
+
+        public void CloseLoaderWindow()
+        {
+            Close();
         }
 
 
         private void OnLoadSceneCompletedHandler(AsyncOperation operation)
         {
-            if (_loading != null)
-                _loading.completed -= OnLoadSceneCompletedHandler;
+            if (LoadingProc != null)
+                LoadingProc.completed -= OnLoadSceneCompletedHandler;
 
             OnSceneLoaded?.Invoke();
         }
