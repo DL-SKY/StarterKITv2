@@ -5,7 +5,9 @@ using DllSky.StarterKITv2.Patterns;
 using DllSky.StarterKITv2.Services;
 using DllSky.StarterKITv2.UI.Windows.FPS;
 using DllSky.StarterKITv2.UI.Windows.Loading;
+using DllSky.StarterKITv2.UI.Windows.WindowsQueue;
 using DllSky.StarterKITv2.UI.WindowsManager;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,6 +18,7 @@ namespace DllSky.StarterKITv2.Application
         [SerializeField] private bool _isUsingFPS;
 
         public WindowsManager WindowsController { get; private set; }
+        public WindowsQueueController WindowsQueue { get; private set; } 
 
 
         private void Start()
@@ -23,6 +26,7 @@ namespace DllSky.StarterKITv2.Application
             SceneManager.sceneLoaded += OnSceneLoadedHandler;
 
             WindowsController = ComponentLocator.Resolve<WindowsManager>();
+            WindowsQueue = ComponentLocator.Resolve<WindowsQueueController>();
 
 #if UNITY_ANDROID
             UnityEngine.Application.targetFrameRate = 60;
@@ -52,6 +56,9 @@ namespace DllSky.StarterKITv2.Application
         private void Initialize()
         {
             CreateLoadingWindow();
+
+            //TODO: сделать нормально
+            WindowsQueue.SetCheckWindows(new List<System.Type> { typeof(UI.Windows.SecondExampleWindow.SecondWindow) });
 
             if (_isUsingFPS)
                 CreateFPSCounter();

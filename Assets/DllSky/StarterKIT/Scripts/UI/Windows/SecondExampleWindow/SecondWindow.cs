@@ -13,6 +13,7 @@ namespace DllSky.StarterKITv2.UI.Windows.SecondExampleWindow
         public const string prefabPath = @"Prefabs\UI\Windows\Second\SecondWindow";
         
         private GameManager _gameManager;
+        private IWindowsManagerUsing _windowsManagerUser;
         private IWindowSceneLoader _loadingWindow;
         private WindowBase _dialog;
 
@@ -20,6 +21,7 @@ namespace DllSky.StarterKITv2.UI.Windows.SecondExampleWindow
         private void Awake()
         {
             _gameManager = GameManager.Instance;
+            _windowsManagerUser = GameManager.Instance;
         }
 
 
@@ -31,7 +33,7 @@ namespace DllSky.StarterKITv2.UI.Windows.SecondExampleWindow
             }
             else
             {
-                _loadingWindow = _gameManager.WindowsController.CreateWindow<SceneLoadingWindow>(SceneLoadingWindow.prefabPath, Enums.EnumWindowsLayer.Loading, ConstantScenes.EXAMPLE_SECOND_SCENE);
+                _loadingWindow = _windowsManagerUser.WindowsController.CreateWindow<SceneLoadingWindow>(SceneLoadingWindow.prefabPath, Enums.EnumWindowsLayer.Loading, ConstantScenes.EXAMPLE_SECOND_SCENE);
                 _loadingWindow.OnSceneLoaded += OnSceneLoadedHandler;
             }
         }
@@ -39,7 +41,7 @@ namespace DllSky.StarterKITv2.UI.Windows.SecondExampleWindow
 
         public void OnClickShowDialogButton()
         {
-            _dialog = _gameManager.WindowsController.CreateWindow<ExampleDialogWindow>(ExampleDialogWindow.prefabPath, Enums.EnumWindowsLayer.Dialogs);
+            _dialog = _windowsManagerUser.WindowsController.CreateWindow<ExampleDialogWindow>(ExampleDialogWindow.prefabPath, Enums.EnumWindowsLayer.Dialogs);
             _dialog.OnClose += OnDialogCloseHandler;
         }
 
@@ -72,7 +74,7 @@ namespace DllSky.StarterKITv2.UI.Windows.SecondExampleWindow
         protected override void CustomClose(bool result)
         {
             var windowData = Random.Range(1, 1001);         //Пример того, что окну можно передавать какие-нибудь данные, н-р, необходимые для отображения
-            _gameManager.WindowsController.CreateWindow<MainMenuWindow>(MainMenuWindow.prefabPath, Enums.EnumWindowsLayer.Main, data: windowData);
+            _windowsManagerUser.WindowsController.CreateWindow<MainMenuWindow>(MainMenuWindow.prefabPath, Enums.EnumWindowsLayer.Main, data: windowData);
         }        
     }
 }
