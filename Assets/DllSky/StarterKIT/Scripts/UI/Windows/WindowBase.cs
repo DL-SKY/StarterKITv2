@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DllSky.StarterKITv2.UI.Windows
 {
-    public class WindowBase : MonoBehaviour, IWindowInitializer
+    public abstract class WindowBase : MonoBehaviour, IWindowInitializer
     {
         public event Action OnInitialize;
         public event Action<bool, WindowBase> OnClose;  

@@ -57,8 +57,14 @@ namespace DllSky.StarterKITv2.Application
         {
             CreateLoadingWindow();
 
-            //TODO: сделать нормально
-            WindowsQueue.SetCheckWindows(new List<System.Type> { typeof(UI.Windows.SecondExampleWindow.SecondWindow) });
+            WindowsQueue.Reset().SetCheckWindows
+                (
+                    new List<System.Type> 
+                    { 
+                        typeof(UI.Windows.SecondExampleWindow.SecondWindow),
+                        typeof(UI.Windows.MainMenuExample.MainMenuWindow)
+                    }
+                );
 
             if (_isUsingFPS)
                 CreateFPSCounter();

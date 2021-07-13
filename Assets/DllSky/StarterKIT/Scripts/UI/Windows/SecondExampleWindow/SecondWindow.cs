@@ -4,6 +4,7 @@ using DllSky.StarterKITv2.Interfaces.Windows;
 using DllSky.StarterKITv2.UI.Windows.DialogExample;
 using DllSky.StarterKITv2.UI.Windows.Loading;
 using DllSky.StarterKITv2.UI.Windows.MainMenuExample;
+using DllSky.StarterKITv2.UI.Windows.WindowsQueue;
 using UnityEngine;
 
 namespace DllSky.StarterKITv2.UI.Windows.SecondExampleWindow
@@ -13,7 +14,7 @@ namespace DllSky.StarterKITv2.UI.Windows.SecondExampleWindow
         public const string prefabPath = @"Prefabs\UI\Windows\Second\SecondWindow";
         
         private GameManager _gameManager;
-        private IWindowsManagerUsing _windowsManagerUser;
+        private IWindowsManagerUsing _windowsManagerHolder;
         private IWindowSceneLoader _loadingWindow;
         private WindowBase _dialog;
 
@@ -21,7 +22,7 @@ namespace DllSky.StarterKITv2.UI.Windows.SecondExampleWindow
         private void Awake()
         {
             _gameManager = GameManager.Instance;
-            _windowsManagerUser = GameManager.Instance;
+            _windowsManagerHolder = GameManager.Instance;
         }
 
 
@@ -33,7 +34,7 @@ namespace DllSky.StarterKITv2.UI.Windows.SecondExampleWindow
             }
             else
             {
-                _loadingWindow = _windowsManagerUser.WindowsController.CreateWindow<SceneLoadingWindow>(SceneLoadingWindow.prefabPath, Enums.EnumWindowsLayer.Loading, ConstantScenes.EXAMPLE_SECOND_SCENE);
+                _loadingWindow = _windowsManagerHolder.WindowsController.CreateWindow<SceneLoadingWindow>(SceneLoadingWindow.prefabPath, Enums.EnumWindowsLayer.Loading, ConstantScenes.EXAMPLE_SECOND_SCENE);
                 _loadingWindow.OnSceneLoaded += OnSceneLoadedHandler;
             }
         }
@@ -41,13 +42,20 @@ namespace DllSky.StarterKITv2.UI.Windows.SecondExampleWindow
 
         public void OnClickShowDialogButton()
         {
-            _dialog = _windowsManagerUser.WindowsController.CreateWindow<ExampleDialogWindow>(ExampleDialogWindow.prefabPath, Enums.EnumWindowsLayer.Dialogs);
+            _dialog = _windowsManagerHolder.WindowsController.CreateWindow<ExampleDialogWindow>(ExampleDialogWindow.prefabPath, Enums.EnumWindowsLayer.Dialogs);
             _dialog.OnClose += OnDialogCloseHandler;
         }
 
         public void OnClickWindowsQueue()
-        { 
-            //TODO : добавить код и реализовать саму систему Оконной Очереди
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                var priority = Random.Range(1, 999);
+                System.Action action = () => { _windowsManagerHolder.WindowsController.CreateWindow<ExampleDialogWindow>(ExampleDialogWindow.prefabPath, Enums.EnumWindowsLayer.Dialogs); };
+                //System.Action action = () => { Debug.LogError("TEST Action"); _windowsManagerUser.WindowsController.OnCloseWindow?.Invoke(false, null); };
+                var data = new WindowsQueueData(priority, action);
+                _gameManager.WindowsQueue.AddToQueue(data);
+            }            
         }
 
 
@@ -74,7 +82,7 @@ namespace DllSky.StarterKITv2.UI.Windows.SecondExampleWindow
         protected override void CustomClose(bool result)
         {
             var windowData = Random.Range(1, 1001);         //Пример того, что окну можно передавать какие-нибудь данные, н-р, необходимые для отображения
-            _windowsManagerUser.WindowsController.CreateWindow<MainMenuWindow>(MainMenuWindow.prefabPath, Enums.EnumWindowsLayer.Main, data: windowData);
+            _windowsManagerHolder.WindowsController.CreateWindow<MainMenuWindow>(MainMenuWindow.prefabPath, Enums.EnumWindowsLayer.Main, data: windowData);
         }        
     }
 }

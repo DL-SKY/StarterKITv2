@@ -38,7 +38,7 @@ namespace DllSky.StarterKITv2.Patterns
 
         protected void Awake()
         {
-            if (!IsInstantiated)
+            if (IsInstantiated == false)
                 _instance = GetComponent<T>();
 
             CustomAwake();

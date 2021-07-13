@@ -11,15 +11,15 @@ namespace DllSky.StarterKITv2.Events
         {
             CustomEventWrapper eWrapper = null;
 
-            if (!_events.TryGetValue(eventType, out eWrapper))
+            if (_events.TryGetValue(eventType, out eWrapper))
+            {
+                eWrapper.OnHandler += listener;                
+            }
+            else
             {
                 eWrapper = new CustomEventWrapper();
                 eWrapper.OnHandler += listener;
                 _events.Add(eventType, eWrapper);
-            }
-            else
-            {
-                eWrapper.OnHandler += listener;
             }
         }
 

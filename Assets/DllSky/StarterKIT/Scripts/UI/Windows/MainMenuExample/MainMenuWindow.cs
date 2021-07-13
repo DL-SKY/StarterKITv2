@@ -16,14 +16,14 @@ namespace DllSky.StarterKITv2.UI.Windows.MainMenuExample
         [SerializeField] private Text _label;
 
         private GameManager _gameManager;
-        private IWindowsManagerUsing _windowsManagerUser;
+        private IWindowsManagerUsing _windowsManagerHolder;
         private IWindowSceneLoader _loadingWindow;
 
 
         private void Awake()
         {
             _gameManager = GameManager.Instance;
-            _windowsManagerUser = GameManager.Instance;
+            _windowsManagerHolder = GameManager.Instance;
         }
 
 
@@ -37,14 +37,14 @@ namespace DllSky.StarterKITv2.UI.Windows.MainMenuExample
             }
             else
             {
-                _loadingWindow = _windowsManagerUser.WindowsController.CreateWindow<SceneLoadingWindow>(SceneLoadingWindow.prefabPath, Enums.EnumWindowsLayer.Loading, ConstantScenes.EXAMPLE_MAIN_MENU);
+                _loadingWindow = _windowsManagerHolder.WindowsController.CreateWindow<SceneLoadingWindow>(SceneLoadingWindow.prefabPath, Enums.EnumWindowsLayer.Loading, ConstantScenes.EXAMPLE_MAIN_MENU);
                 _loadingWindow.OnSceneLoaded += OnSceneLoadedHandler;
             }
         }
 
         public void OnClick()
         {
-            _windowsManagerUser.WindowsController.CreateWindow<SecondWindow>(SecondWindow.prefabPath, Enums.EnumWindowsLayer.Main);
+            _windowsManagerHolder.WindowsController.CreateWindow<SecondWindow>(SecondWindow.prefabPath, Enums.EnumWindowsLayer.Main);
 
             Close();
         }
